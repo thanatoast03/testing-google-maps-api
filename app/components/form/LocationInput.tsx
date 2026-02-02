@@ -2,16 +2,22 @@
 
 import { useFormContext } from "react-hook-form";
 import { LocationName } from "./LocationController";
+import FormError from "./FormError";
 
-export default function LocationInput() {
+export default function LocationInput({
+  ...props
+}: React.ComponentProps<"input">) {
   const { register } = useFormContext<LocationName>();
 
   return (
     <input
       {...register("name", {
-        required: true,
+        required: {
+          message: "Address required.",
+          value: true,
+        },
       })}
-      className="w-full flex bg-white text-black"
+      {...props}
     />
   );
 }
