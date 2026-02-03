@@ -1,7 +1,7 @@
 import googleCall from "@/app/util/googleCall";
 import { NextRequest, NextResponse } from "next/server";
 
-interface Location {
+export interface Location {
   location: {
     latitude: number;
     longitude: number;
