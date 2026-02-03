@@ -2,7 +2,6 @@
 
 import { useFormContext } from "react-hook-form";
 import { LocationName } from "./LocationController";
-import FormError from "./FormError";
 
 export default function LocationInput({
   ...props

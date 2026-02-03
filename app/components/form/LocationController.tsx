@@ -1,6 +1,6 @@
 "use client";
 
-import { getAddresses } from "@/app/server_functions/getAddresses";
+import apiCall from "@/app/util/apiCall";
 import { useCallback } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 
@@ -21,8 +21,12 @@ export default function LocationController({
 
   const onSubmit = useCallback<SubmitHandler<LocationName>>(
     async (data: LocationName) => {
-      console.log(data); // eventually turn into axios call or smth with google
-      const result = await getAddresses({ text: data });
+      const address = data.name;
+      const result = await apiCall({
+        url: `/api/get_place_id/${address}`,
+        method: "GET",
+      });
+
       console.log(result);
     },
     [],
