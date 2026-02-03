@@ -1,7 +1,10 @@
 "use client";
 
+import getSatelliteView from "@/app/calls/getSatelliteView";
 import apiCall from "@/app/util/apiCall";
-import { useCallback } from "react";
+import getPlaceId from "@/app/util/getPlaceId";
+import getSatelliteImageURL from "@/app/util/getSatelliteImageURL";
+import { useCallback, useEffect, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 
 export interface LocationName {
@@ -13,6 +16,7 @@ export default function LocationController({
 }: {
   children: React.ReactNode;
 }) {
+  const [imgURL, setImgURL] = useState<string>();
   const form = useForm<LocationName>({
     defaultValues: {
       name: "",
@@ -22,19 +26,24 @@ export default function LocationController({
   const onSubmit = useCallback<SubmitHandler<LocationName>>(
     async (data: LocationName) => {
       const address = data.name;
-      const result = await apiCall({
-        url: `/api/get_place_id/${address}`,
-        method: "GET",
-      });
+      const location = await getSatelliteView(address);
 
-      console.log(result);
+      if (!location) {
+        console.error("Location not found.");
+        return;
+      }
+
+      setImgURL(getSatelliteImageURL(location));
     },
     [],
   );
 
   return (
     <FormProvider {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>{children}</form>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        {children}
+        {imgURL && <img src={imgURL} className="flex-col p-3" />}
+      </form>
     </FormProvider>
   );
 }

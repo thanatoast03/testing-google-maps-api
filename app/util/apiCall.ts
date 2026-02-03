@@ -4,18 +4,20 @@ export default async function apiCall({
   url,
   method,
   body,
+  additionalHeaders,
 }: {
   url: string;
   method: Method;
   body?: object;
+  additionalHeaders?: Record<string, string>;
 }) {
   try {
-    let headers: RawAxiosRequestHeaders = {};
+    let headers: RawAxiosRequestHeaders = { ...additionalHeaders };
     if (method.toLowerCase() === "post")
       headers["Content-Type"] = "application/json";
 
     const response = await axios({
-      url,
+      url: "/api" + url,
       method,
       headers,
       data: body,

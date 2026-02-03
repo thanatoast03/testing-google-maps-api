@@ -7,22 +7,31 @@ export default async function googleCall({
   method,
   body,
   fieldMask,
+  additionalHeaders,
+  keyInURL = false,
 }: {
   url: string;
   method: Method;
   body?: any;
   fieldMask?: string;
+  additionalHeaders?: Record<string, string>;
+  keyInURL?: boolean;
 }) {
+  const key = process.env.GOOGLE_MAPS_API_KEY;
+  const actualURL = keyInURL
+    ? `${url}${url.includes("?") ? "&" : "?"}key=${key}`
+    : url;
   let headers: RawAxiosRequestHeaders = {
-    "X-Goog-Api-Key": process.env.GOOGLE_MAPS_API_KEY,
+    "X-Goog-Api-Key": key,
     "X-Goog-FieldMask": fieldMask,
+    ...additionalHeaders,
   };
 
   if (method === "POST" || method === "post")
     headers["Content-Type"] = "application/json";
 
   const response = await axios({
-    url,
+    url: actualURL,
     method,
     headers,
     data: body,

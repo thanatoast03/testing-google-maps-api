@@ -26,7 +26,7 @@ export async function GET(
       },
     });
 
-    return NextResponse.json({ name: places[0]?.name });
+    return NextResponse.json(places[0]?.name);
   } catch (error) {
     console.error(error);
     return NextResponse.json({ error: error }, { status: 500 });
