@@ -8,7 +8,6 @@ interface PlaceProps {
 }
 
 export default function place(props: PlaceProps): EmbedReturn {
-  console.log(props.center);
   const propsString = new URLSearchParams({ ...props }).toString();
   return { mapMode: "place", parameters: propsString };
 }

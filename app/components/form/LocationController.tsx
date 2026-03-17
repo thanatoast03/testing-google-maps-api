@@ -1,15 +1,15 @@
 "use client";
 
-import getPlaceIdFromAddress from "@/app/calls/getPlaceIdFromAddress";
-import getSatelliteView from "@/app/calls/getSatelliteView";
 import getSatelliteImageURL from "@/app/util/getSatelliteImageURL";
 import { useCallback, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import GoogleEmbedToImage, { EmbedReturn } from "../ui/GoogleEmbedToImage";
 import place from "../ui/google_embed/place";
 import getPlaceId from "@/app/util/getPlaceId";
-import getPlaceDetailsFromPlaceId from "@/app/calls/getPlaceDetailsFromPlaceId";
-import { Location } from "@/app/api/get_details/[place_id]/route";
+import getPlaceDetailsFromPlaceId from "@/app/calls/getLocationFromPlaceId";
+import { Location } from "@/app/api/get_location/[place_id]/route";
+import getLatLong from "@/app/calls/getLatLong";
+import getNearbyPlace from "@/app/calls/getNearbyPlaces";
 
 export interface LocationName {
   name: string;
@@ -33,7 +33,8 @@ export default function LocationController({
       const address = data.name;
 
       // Comment out from here...
-      const location = await getSatelliteView(address);
+      const location = await getLatLong(address);
+      const nearbyPlace = await getNearbyPlace(address);
 
       if (!location) {
         console.error("Location not found.");
